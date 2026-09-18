@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+/build/
+/dist/
+/parser/out/
+/parser/.vs/
+*.exe
+*.dll
+*.obj
+*.pdb
+*.ilk
+*.log
+.DS_Store
+Thumbs.db

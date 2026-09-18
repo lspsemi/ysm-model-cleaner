@@ -1,0 +1,232 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "unix-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}",
+            "condition": {
+                "type": "notEquals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "wasm-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+                "YSM_TARGET_WASM": "ON"
+            }
+        },
+        {
+            "name": "x64-debug",
+            "displayName": "x64 Debug",
+            "inherits": "windows-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "YSM_TARGET_JNI": "ON"
+            }
+        },
+        {
+            "name": "x64-release",
+            "displayName": "x64 Release",
+            "inherits": "x64-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "YSM_TARGET_JNI": "ON"
+            }
+        },
+        {
+            "name": "x86-debug",
+            "displayName": "x86 Debug",
+            "inherits": "windows-base",
+            "architecture": {
+                "value": "x86",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "YSM_TARGET_JNI": "ON"
+            }
+        },
+        {
+            "name": "x86-release",
+            "displayName": "x86 Release",
+            "inherits": "x86-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "YSM_TARGET_JNI": "ON"
+            }
+        },
+        {
+            "name": "linux-release",
+            "displayName": "Linux Release",
+            "inherits": "unix-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "YSM_TARGET_JNI": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "macos-release",
+            "displayName": "macOS Release",
+            "inherits": "unix-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "YSM_TARGET_JNI": "ON"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "wasm-release",
+            "displayName": "WASM Release",
+            "inherits": "wasm-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+                "YSM_TARGET_WASM": "ON",
+                "YSM_WASM_ENV": "node"
+            }
+        },
+        {
+            "name": "wasm-web-release",
+            "displayName": "WASM Web Release",
+            "inherits": "wasm-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+                "YSM_TARGET_WASM": "ON",
+                "YSM_WASM_ENV": "web"
+            }
+        },
+        {
+            "name": "linux-arm64-release",
+            "displayName": "Linux ARM64 Release",
+            "inherits": "unix-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "YSM_TARGET_JNI": "ON"
+            }
+        },
+        {
+            "name": "loongarch64-release",
+            "displayName": "LoongArch64 Release",
+            "inherits": "unix-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/loongarch64-linux-gnu.cmake",
+                "YSM_TARGET_JNI": "OFF"
+            }
+        },
+        {
+            "name": "riscv64-release",
+            "displayName": "RISC-V64 Release",
+            "inherits": "unix-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/cmake/toolchains/riscv64-linux-gnu.cmake",
+                "YSM_TARGET_JNI": "OFF"
+            }
+        },
+        {
+            "name": "android-arm64-release",
+            "displayName": "Android ARM64 Release",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "installDir": "${sourceDir}/out/install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "$env{ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake",
+                "ANDROID_ABI": "arm64-v8a",
+                "ANDROID_PLATFORM": "android-24",
+                "YSM_TARGET_JNI": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-debug",
+            "configurePreset": "x64-debug"
+        },
+        {
+            "name": "x64-release",
+            "configurePreset": "x64-release"
+        },
+        {
+            "name": "x86-debug",
+            "configurePreset": "x86-debug"
+        },
+        {
+            "name": "x86-release",
+            "configurePreset": "x86-release"
+        },
+        {
+            "name": "linux-release",
+            "configurePreset": "linux-release"
+        },
+        {
+            "name": "macos-release",
+            "configurePreset": "macos-release"
+        },
+        {
+            "name": "wasm-release",
+            "configurePreset": "wasm-release"
+        },
+        {
+            "name": "wasm-web-release",
+            "configurePreset": "wasm-web-release"
+        },
+        {
+            "name": "linux-arm64-release",
+            "configurePreset": "linux-arm64-release"
+        },
+        {
+            "name": "loongarch64-release",
+            "configurePreset": "loongarch64-release"
+        },
+        {
+            "name": "riscv64-release",
+            "configurePreset": "riscv64-release"
+        },
+        {
+            "name": "android-arm64-release",
+            "configurePreset": "android-arm64-release"
+        }
+    ]
+}
